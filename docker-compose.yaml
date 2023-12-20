@@ -12,8 +12,6 @@ services:
     volumes:
       - ./:/usr/src/app
     tty: true
-    ports:
-      - 3000:3000
     command: node server.js
     depends_on:
       db:
@@ -37,6 +35,19 @@ services:
       interval: 5s
       timeout: 10s
       retries: 3
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: 17032000/nginx
+    container_name: nginx
+    networks:
+      - node-network
+    ports:
+      - 8080:80
+    depends_on:
+      - app
 
 networks:
   node-network:
