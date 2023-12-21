@@ -8,6 +8,26 @@ const config = {
     dabatase: 'nodedb'
 }
 
+const mysql = createConnection(config)
+mysql.connect()
+const sql = `
+    CREATE TABLE IF NOT EXISTS nodedb.people (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL
+    )
+`
+Promise.all([new Promise((resolve, reject) => {
+    mysql.query(sql, (err, results, fields) => {
+        if (err) {
+        console.error('Erro ao criar tabela a consulta: ', err);
+        reject(err);
+        return;
+        }
+        resolve(results);
+    });
+})])
+mysql.end()
+
 function getPeople(mysql) {
     return new Promise((resolve, reject) => {
       mysql.query('SELECT * FROM nodedb.people', (err, results, fields) => {
@@ -54,7 +74,7 @@ async function handler(req, res) {
     } 
     else {
         res.statusCode = 404
-        res.end(`${title} <p>404 page not found</p> <p>Use /people</p>`)
+        res.end(`${title} <p>404 page not found</p> <p>Use <a href="http://localhost:8080/people?name=Matheus">http://localhost:8080/people?name=Matheus</p>`)
     }
 }
 

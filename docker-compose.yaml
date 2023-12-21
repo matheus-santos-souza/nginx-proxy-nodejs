@@ -10,6 +10,7 @@ services:
     networks:
       - node-network
     volumes:
+      - node_modules:/usr/src/app/node_modules
       - ./:/usr/src/app
     tty: true
     command: node server.js
@@ -24,7 +25,7 @@ services:
     restart: always
     tty: true
     volumes:
-      - ./volume-mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
@@ -52,3 +53,7 @@ services:
 networks:
   node-network:
     driver: bridge
+
+volumes:
+  mysql:
+  node_modules:
